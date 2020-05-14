@@ -1,42 +1,31 @@
 #Matrix dimensions input
-n=5  #default
-print("Do you want to change the dimension n if yes enter 'Y' and if no enter 'N'")
-m=input("Enter your option: ")
-if m =='Y':
-	n=int(input("Enter the dimension of matrix: "))
-else:
-	pass
+#Winning tile no input
+import argparse
+p=argparse.ArgumentParser()
+p.add_argument("--n",help="Provide Board size",type=int,nargs='?',default=5)
+p.add_argument("--w",help="win value",type=int,nargs='?',default=2048)
+arg=p.parse_args()
 
+n=arg.n
+w=arg.w
 #Cross check for w
-def check():
-	w=int(input("Enter the winning tile no: "))
-	for p in range(1,13):
-		if 2**p==w:
-			return w
-			break
+def check(w):
+	for p in range(1,1000):
+		if 2**p<=w:
+			pass
 		else:
-			continue
-	print("You have entered incorrect value for winning tile no")
-	print("Input must be equal to some power of 2. Please try again!!")
-	w=check()
+			w=2**(p-1)
+			break
 	return w
 
-#winnig tile no initializatiom
-w=2048  #default
-print("Do you want to change the winning tile no if yes enter 'Y' and if no enter 'N'")
-b=input("Enter your option: ")
-if b =='Y':
-	w=check()
-else:
-	pass
-
+w=check(w)
 #Initialize matrix
 matrix=[]
 #Building the matrix with all position are 0
 for i in range(n):
 	x=[]
 	for j in range(n):
-		x.append('0')
+		x.append(0)
 	matrix.append(x)
 
 #Placing 2 at random position in matrix
@@ -61,6 +50,7 @@ def clear():
 
 #defining all move control function for 'W','A,'S','D' inputs
 def moveup(matrix,n):
+	board=matrix
 	for k in range(n):
 		for i in range(n-1):
 			if matrix[i][k]==0:
@@ -88,9 +78,10 @@ def moveup(matrix,n):
 			else:
 				continue
 	
-	return matrix
+	return (matrix,board)
 
 def moveleft(matrix,n):
+	board=matrix
 	for k in range(n):
 		for i in range(n-1):
 			if matrix[k][i]==0:
@@ -116,7 +107,8 @@ def moveleft(matrix,n):
 						break
 			else:
 				continue
-	return matrix
+	
+	return (matrix,board)
 
 # Rotation of matrix for up down motion
 def rotateup(matrix,n):
@@ -135,98 +127,8 @@ def rotateside(matrix,n):
 			matrix[j][n-1-i]=store
 	return matrix
 
-def movedown(matrix,n):
-	for k in range(n):
-		i=n-1
-		while i>0:
-			if matrix[i][k]==0:
-				continue
-			else:
-				j=n-2
-				while j>=0:
-					if matrix[j][k]==matrix[i][k]:
-						matrix[i][k]=matrix[i][k]+matrix[j][k]
-						matrix[j][k]=0
-						break
-					else:
-						continue
-				j-=1
-		i-=1
-
-	
-	for k in range(n):
-		i=n-1
-		while i>0:
-			if matrix[i][k]==0:
-				j=n-2
-				while j>=0:
-					if matrix[j][k]==0:
-						continue
-					else:
-						matrix[i][k]=matrix[j][k]
-						matrix[j][k]=0
-						break
-				j-=1
-			else:
-				continue
-		i-=1
-	return matrix
-
-def moveright(matrix,n):
-	for k in range(n):
-		i=n-1
-		while i>0:
-			if matrix[k][i]==0:
-				continue
-			else:
-				j=n-2
-				while j>=0:
-					if matrix[k][j]==matrix[k][i]:
-						matrix[k][i]=matrix[k][i]+matrix[k][j]
-						matrix[k][j]=0
-						break
-					else:
-						continue
-				j-=1
-		i-=1
-
-	
-	for k in range(n):
-		i=n-1
-		while i>0:
-			if matrix[k][i]==0:
-				j=n-2
-				while j>=0:
-					if matrix[k][j]==0:
-						continue
-					else:
-						matrix[k][i]=matrix[k][j]
-						matrix[k][j]=0
-						break
-				j-=1
-			else:
-				continue
-		i-=1
-	return matrix
-
 #Random insertion of 2
 def insert(matrix,n):
-	'''a=[]
-	count=0
-	import random
-	for i in range(n):
-		x=[]
-		for j in range(n):
-			if matrix[i][j]==0:
-				x.append(i)
-				x.append(j)
-				count+=1
-		a.append(x)
-
-	if count<=4:
-		[i,j]=random.choice(a)
-		matrix[i][j]=2	
-	else:'''
 	while True:
 		i=random.randint(0,n-1)
 		j=random.randint(0,n-1)
@@ -291,24 +193,24 @@ while True:
 	matrixout(matrix,n)
 	q=input("Your next move: ")
 	if q=='W':
-		matrix=moveup(matrix,n)
+		matrix,board=moveup(matrix,n)
 		matrix=insert(matrix,n)
 		win(matrix,n)
 	elif q=='A':
-		matrix=moveleft(matrix,n)
+		matrix,board=moveleft(matrix,n)
 		matrix=insert(matrix,n)
 		win(matrix,n)
 	elif q=='S':
-		matrix=rotateside(matrix,n)
-		matrix=moveleft(matrix,n)
-		matrix=rotateside(matrix,n)
+		matrix=rotateup(matrix,n)
+		matrix,board=moveup(matrix,n)
 		matrix=insert(matrix,n)
+		matrix=rotateup(matrix,n)		
 		win(matrix,n)
 	elif q=='D':
-		matrix=rotateup(matrix,n)
-		matrix=moveup(matrix,n)
-		matrix=rotateup(matrix,n)
+		matrix=rotateside(matrix,n)
+		matrix,board=moveleft(matrix,n)
 		matrix=insert(matrix,n)
+		matrix=rotateside(matrix,n)
 		win(matrix,n)
 	else:
 		print("Incorrect input!! Please enter corrct input again")
