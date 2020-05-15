@@ -42,7 +42,6 @@ def matrixout(matrix,n):
 			print(matrix[i][j],end="  ")
 		print( )
 
-
 #To clear screen
 def clear():
 	import os
@@ -50,7 +49,7 @@ def clear():
 
 #defining all move control function for 'W','A,'S','D' inputs
 def moveup(matrix,n):
-	board=matrix
+	count=0
 	for k in range(n):
 		for i in range(n-1):
 			if matrix[i][k]==0:
@@ -60,6 +59,7 @@ def moveup(matrix,n):
 					if matrix[j][k]==matrix[i][k]:
 						matrix[i][k]=matrix[i][k]+matrix[j][k]
 						matrix[j][k]=0
+						count+=1
 						break
 					else:
 						continue
@@ -74,14 +74,15 @@ def moveup(matrix,n):
 					else:
 						matrix[i][k]=matrix[j][k]
 						matrix[j][k]=0
+						count+=1
 						break
 			else:
 				continue
 	
-	return (matrix,board)
+	return (matrix,count)
 
 def moveleft(matrix,n):
-	board=matrix
+	count=0
 	for k in range(n):
 		for i in range(n-1):
 			if matrix[k][i]==0:
@@ -91,6 +92,7 @@ def moveleft(matrix,n):
 					if matrix[k][j]==matrix[k][i]:
 						matrix[k][i]=matrix[k][i]+matrix[k][j]
 						matrix[k][j]=0
+						count+=1
 						break
 					else:
 						continue
@@ -104,11 +106,12 @@ def moveleft(matrix,n):
 					else:
 						matrix[k][i]=matrix[k][j]
 						matrix[k][j]=0
+						count+=1
 						break
 			else:
 				continue
 	
-	return (matrix,board)
+	return (matrix,count)
 
 # Rotation of matrix for up down motion
 def rotateup(matrix,n):
@@ -191,26 +194,30 @@ while True:
 	clear()
 	print("Moves are 'W'=Up, 'A'=Left, 'S'=Down, 'D'=Right")
 	matrixout(matrix,n)
-	q=input("Your next move: ")
+	q=input("Your next move: ").upper()
 	if q=='W':
-		matrix,board=moveup(matrix,n)
-		matrix=insert(matrix,n)
+		matrix,count=moveup(matrix,n)
+		if count!=0:
+			matrix=insert(matrix,n)
 		win(matrix,n)
 	elif q=='A':
-		matrix,board=moveleft(matrix,n)
-		matrix=insert(matrix,n)
+		matrix,count=moveleft(matrix,n)
+		if count!=0:
+			matrix=insert(matrix,n)
 		win(matrix,n)
 	elif q=='S':
 		matrix=rotateup(matrix,n)
-		matrix,board=moveup(matrix,n)
-		matrix=insert(matrix,n)
-		matrix=rotateup(matrix,n)		
+		matrix,count=moveup(matrix,n)
+		matrix=rotateup(matrix,n)
+		if count!=0:
+			matrix=insert(matrix,n)		
 		win(matrix,n)
 	elif q=='D':
 		matrix=rotateside(matrix,n)
-		matrix,board=moveleft(matrix,n)
-		matrix=insert(matrix,n)
+		matrix,count=moveleft(matrix,n)
 		matrix=rotateside(matrix,n)
+		if count!=0:
+			matrix=insert(matrix,n)
 		win(matrix,n)
 	else:
 		print("Incorrect input!! Please enter corrct input again")
