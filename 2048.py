@@ -39,14 +39,16 @@ matrix[i][j]=2
 def matrixout(matrix,n):
 	for i in range(n):
 		for j in range(n):
-			print(matrix[i][j],end="  ")
+			print(matrix[i][j],end="   ")
 		print( )
 
 #To clear screen
 def clear():
 	import os
-	os.system('cls')
-
+	if os.name=="nt":
+		os.system('cls')
+	else:
+		os.system('clear')
 #defining all move control function for 'W','A,'S','D' inputs
 def moveup(matrix,n):
 	count=0
