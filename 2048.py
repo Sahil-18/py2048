@@ -196,25 +196,27 @@ while True:
 	clear()
 	print("Moves are 'W'=Up, 'A'=Left, 'S'=Down, 'D'=Right")
 	matrixout(matrix,n)
-	q=input("Your next move: ").upper()
-	if q=='W':
+	import msvcrt
+	print("Your next move: ")
+	q=msvcrt.getche().upper()
+	if q==b'W':
 		matrix,count=moveup(matrix,n)
 		if count!=0:
 			matrix=insert(matrix,n)
 		win(matrix,n)
-	elif q=='A':
+	elif q==b'A':
 		matrix,count=moveleft(matrix,n)
 		if count!=0:
 			matrix=insert(matrix,n)
 		win(matrix,n)
-	elif q=='S':
+	elif q==b'S':
 		matrix=rotateup(matrix,n)
 		matrix,count=moveup(matrix,n)
 		matrix=rotateup(matrix,n)
 		if count!=0:
 			matrix=insert(matrix,n)		
 		win(matrix,n)
-	elif q=='D':
+	elif q==b'D':
 		matrix=rotateside(matrix,n)
 		matrix,count=moveleft(matrix,n)
 		matrix=rotateside(matrix,n)
