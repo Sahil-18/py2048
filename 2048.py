@@ -196,7 +196,7 @@ while True:
 	clear()
 	print("Moves are 'W'=Up, 'A'=Left, 'S'=Down, 'D'=Right")
 	matrixout(matrix,n)
-	import msvcrt #input without pressing Enter
+	import msvcrt #taking input without pressing Enter 
 	print("Your next move: ")
 	q=msvcrt.getche().upper()
 	if q==b'W':
