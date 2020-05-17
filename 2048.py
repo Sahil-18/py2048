@@ -194,7 +194,7 @@ def lost(matrix,n):
 #Game starts here
 while True:
 	clear()
-	print("Moves are 'W'=Up, 'A'=Left, 'S'=Down, 'D'=Right")
+	print("Moves are 'W'=Up, 'A'=Left, 'S'=Down, 'D'=Right % 'E'=To end the game")
 	matrixout(matrix,n)
 	import msvcrt #taking input without pressing Enter 
 	print("Your next move: ")
@@ -223,6 +223,8 @@ while True:
 		if count!=0:
 			matrix=insert(matrix,n)
 		win(matrix,n)
+	elif q==b'E':
+		exit()
 	else:
 		print("Incorrect input!! Please enter corrct input again")
 
